@@ -16,7 +16,7 @@ public class EightQueens {
         Arrays.fill(board, -1);
         int possibilities = 0;
         for (int i = 0; i < board.length; i++) {
-            possibilities += put(0, i, board);
+            possibilities += put(0, i, board); // keep adding possibilities
             board[0] = -1;
         }
         return possibilities;
@@ -33,7 +33,7 @@ public class EightQueens {
      * @return
      */
     private static int put(final int row, final int col, int[] board) {
-        int sum = 0;
+        int possibilities = 0;
 
         if (!underAttack(row, col, board)) {
             board[row] = col; // put the queen at that row and column.
@@ -43,12 +43,12 @@ public class EightQueens {
             }
 
             for (int i = 0; i < board.length; i++) {
-                sum += put(row + 1, i, board);
+                possibilities += put(row + 1, i, board); // accumulate possibilities
                 board[row + 1] = -1;
             }
         }
 
-        return sum;
+        return possibilities;
     }
 
     /**
