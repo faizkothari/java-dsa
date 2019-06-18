@@ -2,6 +2,10 @@ package com.training;
 
 /**
  * This class holds various methods for calculating factorial of a non-negative integer.
+ *
+ * Disclaimer: A signed long can only hold a factorial of upto Long.MAX_VALUE, i.e. 2^63 - 1.
+ * The methods return long and have no check for number overflow and will lead to unexpected results.
+ *
  * @author  Faiz Ilahi Kothari
  */
 public class Factorial {
@@ -16,17 +20,20 @@ public class Factorial {
      * @return <tt>true</tt> if this list contains the specified element
      * @throws IllegalArgumentException if <tt>n</tt> is negative
      */
-    public static long recursive(int n) {
+    public static long factorialUsingRecursion(int n) {
 
         if (n < 0) {
             throw new IllegalArgumentException(ERROR_MESSAGE + " Found: " + n + ".");
         }
 
+        // Terminating condition.
+        // We can recur on (n != 0), it saves lines but hides this terminating condition.
+        // I personally prefer to keep it this way.
         if (n == 0) {
             return 1;
         }
 
-        return n * recursive(n - 1);
+        return n * factorialUsingRecursion(n - 1);
     }
 
     /**
@@ -41,7 +48,7 @@ public class Factorial {
      * @throws IllegalArgumentException if <tt>n</tt> is negative
      */
     public static long tailRecursive(int n) {
-        Result res = new Result();
+        Result res = new Result(); // A boxed object to hold the value of factorial.
         recurWithAccumulator(n, res);
         return res.get();
     }
@@ -54,12 +61,13 @@ public class Factorial {
      * @return <tt>true</tt> if this list contains the specified element
      * @throws IllegalArgumentException if <tt>n</tt> is negative
      */
-    public static long iterative(int n) {
+    public static long factorial(int n) {
 
         if (n < 0) {
             throw new IllegalArgumentException(ERROR_MESSAGE + " Found: " + n + ".");
         }
 
+        // This saves the cost of creating a new call stack and calling the function.
         long factorial = 1;
         while (n > 0) {
             factorial *= n;
@@ -82,12 +90,12 @@ public class Factorial {
             throw new IllegalArgumentException(ERROR_MESSAGE + " Found: " + n + ".");
         }
 
+        // Terminating condition
         if (n == 0) {
-            res.inc(1);
             return;
         }
 
-        res.inc(n);
+        res.multiplyBy(n);
         recurWithAccumulator(n - 1, res);
     }
 
@@ -97,7 +105,7 @@ public class Factorial {
     private static class Result {
         long result = 1;
 
-        void inc(long n) {
+        void multiplyBy(long n) {
             result *= n;
         }
 
